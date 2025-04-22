@@ -1,17 +1,19 @@
 
 import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Clock } from 'lucide-react-native';
+import { ShoppingBag } from 'lucide-react-native';
 
 export default function OrdersScreen() {
   return (
     <SafeAreaView style={styles.container} edges={['bottom']}>
       <View style={styles.content}>
         <View style={styles.emptyState}>
-          <Clock size={48} color="#CCCCCC" />
-          <Text style={styles.emptyTitle}>No orders yet</Text>
-          <Text style={styles.emptyText}>
+          <View style={styles.iconContainer}>
+            <ShoppingBag size={40} color="#FF3008" />
+          </View>
+          <Text style={styles.title}>No orders yet</Text>
+          <Text style={styles.subtitle}>
             Your orders will appear here when you place them
           </Text>
         </View>
@@ -23,26 +25,36 @@ export default function OrdersScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8F8F8',
+    backgroundColor: '#F8F9FA',
   },
   content: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 16,
+    padding: 32,
   },
   emptyState: {
     alignItems: 'center',
-    gap: 12,
   },
-  emptyTitle: {
+  iconContainer: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: '#FFF0ED',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 24,
+  },
+  title: {
     fontSize: 20,
     fontWeight: '600',
-    color: '#000000',
+    color: '#1C1C1C',
+    marginBottom: 8,
   },
-  emptyText: {
+  subtitle: {
     fontSize: 16,
-    color: '#666666',
+    color: '#86939E',
     textAlign: 'center',
+    lineHeight: 24,
   },
 });

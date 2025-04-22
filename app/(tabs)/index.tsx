@@ -2,31 +2,33 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, FlatList } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { MapPin, ChevronDown } from 'lucide-react-native';
+import { MapPin, Clock, Star } from 'lucide-react-native';
 
 const categories = [
-  { id: '1', name: 'Restaurants', image: 'https://images.unsplash.com/photo-1552566626-52f8b828add9?w=200&h=200&fit=crop' },
-  { id: '2', name: 'Grocery', image: 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=200&h=200&fit=crop' },
-  { id: '3', name: 'Convenience', image: 'https://images.unsplash.com/photo-1578916171728-46686eac8d58?w=200&h=200&fit=crop' },
-  { id: '4', name: 'Alcohol', image: 'https://images.unsplash.com/photo-1569529465841-dfecdab7503b?w=200&h=200&fit=crop' },
+  { id: '1', name: 'Fast Food', image: 'https://images.unsplash.com/photo-1561758033-d89a9ad46330?w=500&q=80' },
+  { id: '2', name: 'Pizza', image: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500&q=80' },
+  { id: '3', name: 'Sushi', image: 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=500&q=80' },
+  { id: '4', name: 'Mexican', image: 'https://images.unsplash.com/photo-1599974579688-8dbdd335c77f?w=500&q=80' },
 ];
 
 const restaurants = [
   {
     id: '1',
-    name: 'Burger House',
-    image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500&h=300&fit=crop',
-    rating: 4.5,
-    deliveryTime: '20-30 min',
-    deliveryFee: '$2.99',
+    name: 'Burger Palace',
+    image: 'https://images.unsplash.com/photo-1586816001966-79b736744398?w=500&q=80',
+    rating: 4.8,
+    deliveryTime: '20-30',
+    deliveryFee: 2.99,
+    tags: ['American', 'Burgers'],
   },
   {
     id: '2',
     name: 'Sushi Master',
-    image: 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=500&h=300&fit=crop',
-    rating: 4.8,
-    deliveryTime: '25-35 min',
-    deliveryFee: '$3.99',
+    image: 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=500&q=80',
+    rating: 4.9,
+    deliveryTime: '25-35',
+    deliveryFee: 3.99,
+    tags: ['Japanese', 'Sushi'],
   },
 ];
 
@@ -43,10 +45,23 @@ export default function HomeScreen() {
       <Image source={{ uri: item.image }} style={styles.restaurantImage} />
       <View style={styles.restaurantInfo}>
         <Text style={styles.restaurantName}>{item.name}</Text>
-        <View style={styles.restaurantDetails}>
-          <Text style={styles.restaurantRating}>★ {item.rating}</Text>
-          <Text style={styles.restaurantDeliveryTime}>{item.deliveryTime}</Text>
-          <Text style={styles.restaurantDeliveryFee}>{item.deliveryFee} delivery</Text>
+        <View style={styles.ratingContainer}>
+          <Star size={16} color="#FF3008" fill="#FF3008" />
+          <Text style={styles.rating}>{item.rating}</Text>
+        </View>
+        <View style={styles.tagsContainer}>
+          {item.tags.map((tag, index) => (
+            <Text key={index} style={styles.tag}>
+              {tag}
+              {index < item.tags.length - 1 ? ' • ' : ''}
+            </Text>
+          ))}
+        </View>
+        <View style={styles.deliveryInfo}>
+          <Clock size={14} color="#86939E" />
+          <Text style={styles.deliveryText}>{item.deliveryTime} min</Text>
+          <Text style={styles.deliveryDot}>•</Text>
+          <Text style={styles.deliveryFee}>${item.deliveryFee} delivery fee</Text>
         </View>
       </View>
     </TouchableOpacity>
@@ -54,34 +69,27 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaView style={styles.container} edges={['bottom']}>
-      <ScrollView style={styles.scrollView}>
+      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         <View style={styles.header}>
-          <View style={styles.locationContainer}>
-            <MapPin size={20} color="#FF3008" />
-            <Text style={styles.locationText}>Home</Text>
-            <ChevronDown size={20} color="#000" />
-          </View>
+          <MapPin size={20} color="#FF3008" />
+          <Text style={styles.headerText}>Delivering to Home</Text>
         </View>
 
-        <View style={styles.categoriesContainer}>
-          <Text style={styles.sectionTitle}>Categories</Text>
-          <FlatList
-            data={categories}
-            renderItem={renderCategory}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.categoriesList}
-          />
-        </View>
+        <Text style={styles.sectionTitle}>Categories</Text>
+        <FlatList
+          data={categories}
+          renderItem={renderCategory}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.categoriesList}
+        />
 
-        <View style={styles.restaurantsContainer}>
-          <Text style={styles.sectionTitle}>Popular Restaurants</Text>
-          {restaurants.map(restaurant => (
-            <View key={restaurant.id}>
-              {renderRestaurant({ item: restaurant })}
-            </View>
-          ))}
-        </View>
+        <Text style={styles.sectionTitle}>Popular Restaurants</Text>
+        <FlatList
+          data={restaurants}
+          renderItem={renderRestaurant}
+          scrollEnabled={false}
+        />
       </ScrollView>
     </SafeAreaView>
   );
@@ -90,62 +98,59 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8F8F8',
+    backgroundColor: '#F8F9FA',
   },
-  scrollView: {
+  content: {
     flex: 1,
   },
   header: {
-    padding: 16,
-    backgroundColor: '#FFFFFF',
-    borderBottomWidth: 1,
-    borderBottomColor: '#EEEEEE',
-  },
-  locationContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    backgroundColor: '#FFFFFF',
+    borderBottomWidth: 1,
+    borderBottomColor: '#F0F0F0',
   },
-  locationText: {
+  headerText: {
+    marginLeft: 8,
     fontSize: 16,
-    fontWeight: '600',
-    color: '#000000',
-  },
-  categoriesContainer: {
-    padding: 16,
+    fontWeight: '500',
+    color: '#1C1C1C',
   },
   sectionTitle: {
     fontSize: 20,
     fontWeight: '700',
+    color: '#1C1C1C',
+    marginTop: 24,
     marginBottom: 16,
-    color: '#000000',
+    paddingHorizontal: 16,
   },
   categoriesList: {
-    gap: 16,
+    paddingHorizontal: 16,
   },
   categoryCard: {
+    marginRight: 16,
     width: 100,
-    marginRight: 12,
+    alignItems: 'center',
   },
   categoryImage: {
     width: 100,
     height: 100,
-    borderRadius: 12,
+    borderRadius: 50,
     marginBottom: 8,
   },
   categoryName: {
     fontSize: 14,
     fontWeight: '500',
+    color: '#1C1C1C',
     textAlign: 'center',
-    color: '#000000',
-  },
-  restaurantsContainer: {
-    padding: 16,
   },
   restaurantCard: {
     backgroundColor: '#FFFFFF',
-    borderRadius: 12,
+    marginHorizontal: 16,
     marginBottom: 16,
+    borderRadius: 12,
     overflow: 'hidden',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -155,32 +160,51 @@ const styles = StyleSheet.create({
   },
   restaurantImage: {
     width: '100%',
-    height: 180,
+    height: 200,
   },
   restaurantInfo: {
-    padding: 12,
+    padding: 16,
   },
   restaurantName: {
     fontSize: 18,
     fontWeight: '600',
-    marginBottom: 6,
-    color: '#000000',
+    color: '#1C1C1C',
+    marginBottom: 8,
   },
-  restaurantDetails: {
+  ratingContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
+    marginBottom: 8,
   },
-  restaurantRating: {
+  rating: {
+    marginLeft: 4,
     fontSize: 14,
-    color: '#666666',
+    fontWeight: '600',
+    color: '#1C1C1C',
   },
-  restaurantDeliveryTime: {
-    fontSize: 14,
-    color: '#666666',
+  tagsContainer: {
+    flexDirection: 'row',
+    marginBottom: 8,
   },
-  restaurantDeliveryFee: {
+  tag: {
     fontSize: 14,
-    color: '#666666',
+    color: '#86939E',
+  },
+  deliveryInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  deliveryText: {
+    marginLeft: 4,
+    fontSize: 14,
+    color: '#86939E',
+  },
+  deliveryDot: {
+    marginHorizontal: 8,
+    color: '#86939E',
+  },
+  deliveryFee: {
+    fontSize: 14,
+    color: '#86939E',
   },
 });
