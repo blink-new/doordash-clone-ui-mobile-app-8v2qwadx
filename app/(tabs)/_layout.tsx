@@ -1,72 +1,83 @@
 
 import { Tabs } from 'expo-router';
 import { Home, Search, ShoppingBag, User } from 'lucide-react-native';
+import { useFonts, Inter_400Regular, Inter_600SemiBold, Inter_700Bold } from '@expo-google-fonts/inter';
+import { ActivityIndicator } from 'react-native';
 
 export default function TabLayout() {
+  let [fontsLoaded] = useFonts({
+    Inter_400Regular,
+    Inter_600SemiBold,
+    Inter_700Bold,
+  });
+
+  if (!fontsLoaded) {
+    return <ActivityIndicator size="large" color="#FF3008" style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} />;
+  }
+
   return (
     <Tabs
       screenOptions={{
-        headerShown: true,
+        headerShown: false,
         tabBarActiveTintColor: '#FF3008',
-        tabBarInactiveTintColor: '#86939E',
+        tabBarInactiveTintColor: '#B0B0B0',
+        tabBarShowLabel: true,
+        tabBarLabelStyle: {
+          fontFamily: 'Inter_600SemiBold',
+          fontSize: 12,
+          marginBottom: 6,
+        },
         tabBarStyle: {
-          backgroundColor: '#FFFFFF',
-          height: 85,
-          paddingBottom: 30,
-          paddingTop: 8,
-          borderTopWidth: 1,
-          borderTopColor: '#F0F0F0',
+          position: 'absolute',
+          left: 16,
+          right: 16,
+          bottom: 24,
+          height: 70,
+          borderRadius: 32,
+          backgroundColor: '#fff',
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 8 },
+          shadowOpacity: 0.12,
+          shadowRadius: 16,
           elevation: 8,
-          shadowColor: '#000',
-          shadowOffset: { width: 0, height: -2 },
-          shadowOpacity: 0.1,
-          shadowRadius: 3,
-        },
-        headerStyle: {
-          backgroundColor: '#FFFFFF',
-          shadowColor: '#000',
-          shadowOffset: { width: 0, height: 2 },
-          shadowOpacity: 0.05,
-          shadowRadius: 2,
-          elevation: 3,
-        },
-        headerTitleStyle: {
-          fontWeight: '600',
-          fontSize: 18,
-          color: '#1C1C1C',
+          borderTopWidth: 0,
+          paddingBottom: 0,
         },
       }}>
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Delivery',
-          tabBarIcon: ({ color, size }) => <Home size={24} color={color} />,
-          headerTitle: 'Delivery to Home',
-          headerTitleStyle: {
-            fontSize: 16,
-            color: '#1C1C1C',
-          },
+          title: 'Home',
+          tabBarIcon: ({ color, size, focused }) => (
+            <Home color={color} size={size} strokeWidth={focused ? 2.5 : 2} />
+          ),
         }}
       />
       <Tabs.Screen
         name="search"
         options={{
           title: 'Search',
-          tabBarIcon: ({ color, size }) => <Search size={24} color={color} />,
+          tabBarIcon: ({ color, size, focused }) => (
+            <Search color={color} size={size} strokeWidth={focused ? 2.5 : 2} />
+          ),
         }}
       />
       <Tabs.Screen
         name="orders"
         options={{
           title: 'Orders',
-          tabBarIcon: ({ color, size }) => <ShoppingBag size={24} color={color} />,
+          tabBarIcon: ({ color, size, focused }) => (
+            <ShoppingBag color={color} size={size} strokeWidth={focused ? 2.5 : 2} />
+          ),
         }}
       />
       <Tabs.Screen
         name="account"
         options={{
           title: 'Account',
-          tabBarIcon: ({ color, size }) => <User size={24} color={color} />,
+          tabBarIcon: ({ color, size, focused }) => (
+            <User color={color} size={size} strokeWidth={focused ? 2.5 : 2} />
+          ),
         }}
       />
     </Tabs>

@@ -1,255 +1,294 @@
 
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, FlatList } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, Pressable, Animated } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { MapPin, Clock, Star } from 'lucide-react-native';
+import { MapPin, Star, Clock, ChevronRight } from 'lucide-react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const categories = [
-  { id: '1', name: 'Fast Food', image: 'https://images.unsplash.com/photo-1561758033-d89a9ad46330?w=500&q=80' },
-  { id: '2', name: 'Pizza', image: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500&q=80' },
-  { id: '3', name: 'Sushi', image: 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=500&q=80' },
-  { id: '4', name: 'Mexican', image: 'https://images.unsplash.com/photo-1599974579688-8dbdd335c77f?w=500&q=80' },
+  { name: 'Pizza', image: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=200&q=80' },
+  { name: 'Burgers', image: 'https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=200&q=80' },
+  { name: 'Sushi', image: 'https://images.unsplash.com/photo-1464306076886-debca5e8a6b0?auto=format&fit=crop&w=200&q=80' },
+  { name: 'Tacos', image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=200&q=80' },
+  { name: 'Dessert', image: 'https://images.unsplash.com/photo-1505250469679-203ad9ced0cb?auto=format&fit=crop&w=200&q=80' },
 ];
 
 const restaurants = [
   {
-    id: '1',
-    name: 'Burger Palace',
-    image: 'https://images.unsplash.com/photo-1586816001966-79b736744398?w=500&q=80',
+    name: 'Pizza Palace',
+    image: 'https://images.unsplash.com/photo-1519864600265-abb23847ef2c?auto=format&fit=crop&w=600&q=80',
     rating: 4.8,
-    deliveryTime: '20-30',
-    deliveryFee: 2.99,
-    tags: ['American', 'Burgers'],
+    reviews: 1200,
+    category: 'Pizza',
+    time: '25-35 min',
+    distance: '1.2 mi',
+    delivery: 'Free',
   },
   {
-    id: '2',
-    name: 'Sushi Master',
-    image: 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=500&q=80',
-    rating: 4.9,
-    deliveryTime: '25-35',
-    deliveryFee: 3.99,
-    tags: ['Japanese', 'Sushi'],
-  },
-  {
-    id: '3',
-    name: 'Pizza Heaven',
-    image: 'https://images.unsplash.com/photo-1604382355076-af4b0eb60143?w=500&q=80',
-    rating: 4.7,
-    deliveryTime: '30-40',
-    deliveryFee: 1.99,
-    tags: ['Italian', 'Pizza'],
-  },
-  {
-    id: '4',
-    name: 'Taco Fiesta',
-    image: 'https://images.unsplash.com/photo-1613514785940-daed07799d9b?w=500&q=80',
+    name: 'Burger Bros',
+    image: 'https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=600&q=80',
     rating: 4.6,
-    deliveryTime: '25-35',
-    deliveryFee: 2.49,
-    tags: ['Mexican', 'Tacos'],
+    reviews: 980,
+    category: 'Burgers',
+    time: '20-30 min',
+    distance: '0.8 mi',
+    delivery: '$2.99',
   },
   {
-    id: '5',
-    name: 'Thai Spice',
-    image: 'https://images.unsplash.com/photo-1559314809-0d155014e29e?w=500&q=80',
-    rating: 4.8,
-    deliveryTime: '35-45',
-    deliveryFee: 3.49,
-    tags: ['Thai', 'Spicy'],
-  },
-  {
-    id: '6',
-    name: 'Fresh Poke Bowl',
-    image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500&q=80',
+    name: 'Sushi World',
+    image: 'https://images.unsplash.com/photo-1464306076886-debca5e8a6b0?auto=format&fit=crop&w=600&q=80',
     rating: 4.9,
-    deliveryTime: '20-30',
-    deliveryFee: 2.99,
-    tags: ['Hawaiian', 'Healthy'],
+    reviews: 1500,
+    category: 'Sushi',
+    time: '30-40 min',
+    distance: '2.1 mi',
+    delivery: 'Free',
   },
   {
-    id: '7',
-    name: 'BBQ King',
-    image: 'https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?w=500&q=80',
+    name: 'Taco Town',
+    image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=600&q=80',
     rating: 4.7,
-    deliveryTime: '40-50',
-    deliveryFee: 4.99,
-    tags: ['BBQ', 'American'],
+    reviews: 1100,
+    category: 'Tacos',
+    time: '15-25 min',
+    distance: '1.5 mi',
+    delivery: '$1.99',
+  },
+  {
+    name: 'Sweet Treats',
+    image: 'https://images.unsplash.com/photo-1505250469679-203ad9ced0cb?auto=format&fit=crop&w=600&q=80',
+    rating: 4.8,
+    reviews: 900,
+    category: 'Dessert',
+    time: '10-20 min',
+    distance: '0.5 mi',
+    delivery: 'Free',
   },
 ];
 
 export default function HomeScreen() {
-  const renderCategory = ({ item }) => (
-    <TouchableOpacity style={styles.categoryCard}>
-      <Image source={{ uri: item.image }} style={styles.categoryImage} />
-      <Text style={styles.categoryName}>{item.name}</Text>
-    </TouchableOpacity>
-  );
-
-  const renderRestaurant = ({ item }) => (
-    <TouchableOpacity style={styles.restaurantCard}>
-      <Image source={{ uri: item.image }} style={styles.restaurantImage} />
-      <View style={styles.restaurantInfo}>
-        <Text style={styles.restaurantName}>{item.name}</Text>
-        <View style={styles.ratingContainer}>
-          <Star size={16} color="#FF3008" fill="#FF3008" />
-          <Text style={styles.rating}>{item.rating}</Text>
-        </View>
-        <View style={styles.tagsContainer}>
-          {item.tags.map((tag, index) => (
-            <Text key={index} style={styles.tag}>
-              {tag}
-              {index < item.tags.length - 1 ? ' • ' : ''}
-            </Text>
-          ))}
-        </View>
-        <View style={styles.deliveryInfo}>
-          <Clock size={14} color="#86939E" />
-          <Text style={styles.deliveryText}>{item.deliveryTime} min</Text>
-          <Text style={styles.deliveryDot}>•</Text>
-          <Text style={styles.deliveryFee}>${item.deliveryFee} delivery fee</Text>
-        </View>
-      </View>
-    </TouchableOpacity>
-  );
-
   return (
-    <SafeAreaView style={styles.container} edges={['bottom']}>
-      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        <View style={styles.header}>
-          <MapPin size={20} color="#FF3008" />
-          <Text style={styles.headerText}>Delivering to Home</Text>
-        </View>
+    <LinearGradient
+      colors={['#FFF6F2', '#FFFFFF']}
+      style={{ flex: 1 }}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 0, y: 1 }}
+    >
+      <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
+        <ScrollView
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
+        >
+          {/* Location Header */}
+          <View style={styles.headerRow}>
+            <MapPin color="#FF3008" size={22} style={{ marginRight: 8 }} />
+            <Text style={styles.headerLocation}>Deliver to</Text>
+            <Text style={styles.headerAddress}>123 Main St</Text>
+          </View>
 
-        <Text style={styles.sectionTitle}>Categories</Text>
-        <FlatList
-          data={categories}
-          renderItem={renderCategory}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.categoriesList}
-        />
+          {/* Hero Title */}
+          <Text style={styles.heroTitle}>Discover the best food near you</Text>
 
-        <Text style={styles.sectionTitle}>Popular Restaurants</Text>
-        <FlatList
-          data={restaurants}
-          renderItem={renderRestaurant}
-          scrollEnabled={false}
-        />
-      </ScrollView>
-    </SafeAreaView>
+          {/* Categories */}
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.categoriesRow}
+          >
+            {categories.map((cat, idx) => (
+              <View key={cat.name} style={styles.categoryItem}>
+                <Image source={{ uri: cat.image }} style={styles.categoryImage} />
+                <Text style={styles.categoryLabel}>{cat.name}</Text>
+              </View>
+            ))}
+          </ScrollView>
+
+          {/* Featured Restaurants */}
+          <View style={styles.sectionHeaderRow}>
+            <Text style={styles.sectionHeader}>Featured Restaurants</Text>
+            <ChevronRight color="#FF3008" size={20} />
+          </View>
+          <View style={styles.restaurantList}>
+            {restaurants.map((rest, idx) => (
+              <Pressable
+                key={rest.name}
+                style={({ pressed }) => [
+                  styles.restaurantCard,
+                  pressed && { transform: [{ scale: 0.97 }], opacity: 0.95 },
+                ]}
+                android_ripple={{ color: '#FF300810' }}
+              >
+                <Image source={{ uri: rest.image }} style={styles.restaurantImage} />
+                <View style={styles.restaurantInfo}>
+                  <Text style={styles.restaurantName}>{rest.name}</Text>
+                  <View style={styles.restaurantMetaRow}>
+                    <Star color="#FFD700" size={16} fill="#FFD700" style={{ marginRight: 2 }} />
+                    <Text style={styles.restaurantRating}>{rest.rating}</Text>
+                    <Text style={styles.restaurantReviews}>({rest.reviews}) · {rest.category}</Text>
+                  </View>
+                  <View style={styles.restaurantMetaRow}>
+                    <Clock color="#FF3008" size={15} style={{ marginRight: 2 }} />
+                    <Text style={styles.restaurantTime}>{rest.time}</Text>
+                    <Text style={styles.restaurantDistance}> · {rest.distance}</Text>
+                    <Text style={styles.restaurantDelivery}> · {rest.delivery} delivery</Text>
+                  </View>
+                </View>
+              </Pressable>
+            ))}
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8F9FA',
   },
-  content: {
-    flex: 1,
+  scrollContent: {
+    paddingBottom: 32,
+    paddingTop: 8,
   },
-  header: {
+  headerRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    backgroundColor: '#FFFFFF',
-    borderBottomWidth: 1,
-    borderBottomColor: '#F0F0F0',
+    marginTop: 8,
+    marginLeft: 24,
+    marginBottom: 2,
   },
-  headerText: {
-    marginLeft: 8,
-    fontSize: 16,
+  headerLocation: {
+    fontFamily: 'Inter_600SemiBold',
+    color: '#FF3008',
+    fontSize: 15,
+    marginRight: 6,
+    marginLeft: 2,
+  },
+  headerAddress: {
+    fontFamily: 'Inter_400Regular',
+    color: '#222',
+    fontSize: 15,
     fontWeight: '500',
-    color: '#1C1C1C',
   },
-  sectionTitle: {
-    fontSize: 20,
-    fontWeight: '700',
-    color: '#1C1C1C',
-    marginTop: 24,
-    marginBottom: 16,
-    paddingHorizontal: 16,
+  heroTitle: {
+    fontFamily: 'Inter_700Bold',
+    fontSize: 28,
+    color: '#222',
+    marginLeft: 24,
+    marginTop: 8,
+    marginBottom: 18,
+    lineHeight: 34,
+    letterSpacing: -0.5,
   },
-  categoriesList: {
-    paddingHorizontal: 16,
+  categoriesRow: {
+    flexDirection: 'row',
+    paddingLeft: 16,
+    paddingRight: 8,
+    marginBottom: 18,
   },
-  categoryCard: {
-    marginRight: 16,
-    width: 100,
+  categoryItem: {
     alignItems: 'center',
+    marginRight: 18,
   },
   categoryImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    marginBottom: 8,
+    width: 62,
+    height: 62,
+    borderRadius: 31,
+    marginBottom: 6,
+    borderWidth: 2,
+    borderColor: '#FFF',
+    shadowColor: '#FF3008',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.12,
+    shadowRadius: 6,
+    elevation: 2,
   },
-  categoryName: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: '#1C1C1C',
-    textAlign: 'center',
+  categoryLabel: {
+    fontFamily: 'Inter_600SemiBold',
+    fontSize: 13,
+    color: '#222',
+  },
+  sectionHeaderRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginHorizontal: 24,
+    marginBottom: 8,
+    marginTop: 8,
+  },
+  sectionHeader: {
+    fontFamily: 'Inter_700Bold',
+    fontSize: 20,
+    color: '#222',
+    letterSpacing: -0.5,
+  },
+  restaurantList: {
+    paddingHorizontal: 12,
+    gap: 18,
   },
   restaurantCard: {
-    backgroundColor: '#FFFFFF',
-    marginHorizontal: 16,
-    marginBottom: 16,
-    borderRadius: 12,
+    backgroundColor: '#fff',
+    borderRadius: 18,
+    marginBottom: 8,
+    shadowColor: '#FF3008',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.10,
+    shadowRadius: 16,
+    elevation: 4,
     overflow: 'hidden',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 10,
   },
   restaurantImage: {
-    width: '100%',
-    height: 200,
+    width: 80,
+    height: 80,
+    borderRadius: 14,
+    marginRight: 14,
+    backgroundColor: '#F2F2F2',
   },
   restaurantInfo: {
-    padding: 16,
+    flex: 1,
+    justifyContent: 'center',
   },
   restaurantName: {
+    fontFamily: 'Inter_700Bold',
     fontSize: 18,
-    fontWeight: '600',
-    color: '#1C1C1C',
-    marginBottom: 8,
+    color: '#222',
+    marginBottom: 2,
   },
-  ratingContainer: {
+  restaurantMetaRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 8,
+    marginBottom: 2,
   },
-  rating: {
-    marginLeft: 4,
+  restaurantRating: {
+    fontFamily: 'Inter_600SemiBold',
     fontSize: 14,
-    fontWeight: '600',
-    color: '#1C1C1C',
+    color: '#222',
+    marginLeft: 2,
+    marginRight: 2,
   },
-  tagsContainer: {
-    flexDirection: 'row',
-    marginBottom: 8,
+  restaurantReviews: {
+    fontFamily: 'Inter_400Regular',
+    fontSize: 13,
+    color: '#888',
+    marginLeft: 2,
   },
-  tag: {
-    fontSize: 14,
-    color: '#86939E',
+  restaurantTime: {
+    fontFamily: 'Inter_400Regular',
+    fontSize: 13,
+    color: '#222',
+    marginLeft: 2,
   },
-  deliveryInfo: {
-    flexDirection: 'row',
-    alignItems: 'center',
+  restaurantDistance: {
+    fontFamily: 'Inter_400Regular',
+    fontSize: 13,
+    color: '#888',
   },
-  deliveryText: {
-    marginLeft: 4,
-    fontSize: 14,
-    color: '#86939E',
-  },
-  deliveryDot: {
-    marginHorizontal: 8,
-    color: '#86939E',
-  },
-  deliveryFee: {
-    fontSize: 14,
-    color: '#86939E',
+  restaurantDelivery: {
+    fontFamily: 'Inter_400Regular',
+    fontSize: 13,
+    color: '#FF3008',
   },
 });

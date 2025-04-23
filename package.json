@@ -17,9 +17,9 @@
     "expo-blur": "^14.0.3",
     "expo-camera": "^16.0.18",
     "expo-constants": "^17.0.5",
-    "expo-font": "^13.0.3",
+    "expo-font": "latest",
     "expo-haptics": "^14.0.1",
-    "expo-linear-gradient": "^14.0.2",
+    "expo-linear-gradient": "latest",
     "expo-linking": "^7.0.5",
     "expo-router": "4.0.17",
     "expo-splash-screen": "^0.29.21",
@@ -38,7 +38,8 @@
     "react-native-svg": "^15.11.1",
     "react-native-url-polyfill": "^2.0.0",
     "react-native-web": "^0.19.13",
-    "react-native-webview": "13.12.5"
+    "react-native-webview": "13.12.5",
+    "@expo-google-fonts/inter": "latest"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

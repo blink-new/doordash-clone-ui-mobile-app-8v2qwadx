@@ -1,117 +1,132 @@
 
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ChevronRight, Heart, MapPin, Bell, Gift, Help, Settings } from 'lucide-react-native';
-
-const menuItems = [
-  { icon: Heart, label: 'Favorites', color: '#FF3008' },
-  { icon: MapPin, label: 'Addresses', color: '#4CAF50' },
-  { icon: Bell, label: 'Notifications', color: '#2196F3' },
-  { icon: Gift, label: 'Rewards', color: '#9C27B0' },
-  { icon: Help, label: 'Help Center', color: '#FF9800' },
-  { icon: Settings, label: 'Settings', color: '#607D8B' },
-];
+import { LogOut, Settings, HelpCircle, CreditCard, User } from 'lucide-react-native';
 
 export default function AccountScreen() {
   return (
-    <SafeAreaView style={styles.container} edges={['bottom']}>
-      <ScrollView style={styles.content}>
-        <View style={styles.profileSection}>
-          <View style={styles.profileInfo}>
-            <Image
-              source={{ uri: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200&q=80' }}
-              style={styles.avatar}
-            />
-            <View style={styles.profileText}>
-              <Text style={styles.name}>John Doe</Text>
-              <Text style={styles.email}>john.doe@example.com</Text>
-            </View>
-          </View>
+    <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
+      <View style={styles.header}>
+        <Text style={styles.title}>Account</Text>
+      </View>
+      <View style={styles.profileRow}>
+        <View style={styles.avatarWrapper}>
+          <Image
+            source={{ uri: 'https://randomuser.me/api/portraits/men/32.jpg' }}
+            style={styles.avatar}
+          />
         </View>
-
-        <View style={styles.menuSection}>
-          {menuItems.map((item, index) => (
-            <TouchableOpacity key={index} style={styles.menuItem}>
-              <View style={styles.menuItemLeft}>
-                <View style={[styles.iconContainer, { backgroundColor: `${item.color}15` }]}>
-                  <item.icon size={20} color={item.color} />
-                </View>
-                <Text style={styles.menuItemText}>{item.label}</Text>
-              </View>
-              <ChevronRight size={20} color="#86939E" />
-            </TouchableOpacity>
-          ))}
+        <View>
+          <Text style={styles.profileName}>John Doe</Text>
+          <Text style={styles.profileEmail}>john.doe@email.com</Text>
         </View>
-      </ScrollView>
+      </View>
+      <View style={styles.menuList}>
+        <MenuItem icon={<User color="#FF3008" size={22} />} label="Profile" />
+        <MenuItem icon={<CreditCard color="#FF3008" size={22} />} label="Payment" />
+        <MenuItem icon={<Settings color="#FF3008" size={22} />} label="Settings" />
+        <MenuItem icon={<HelpCircle color="#FF3008" size={22} />} label="Help" />
+        <MenuItem icon={<LogOut color="#FF3008" size={22} />} label="Log Out" last />
+      </View>
     </SafeAreaView>
+  );
+}
+
+function MenuItem({ icon, label, last }) {
+  return (
+    <TouchableOpacity
+      style={[
+        styles.menuItem,
+        last && { borderBottomWidth: 0 },
+      ]}
+      activeOpacity={0.7}
+    >
+      <View style={styles.menuIcon}>{icon}</View>
+      <Text style={styles.menuLabel}>{label}</Text>
+    </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8F9FA',
+    backgroundColor: '#FFF6F2',
   },
-  content: {
-    flex: 1,
+  header: {
+    marginTop: 16,
+    marginBottom: 8,
+    marginLeft: 24,
   },
-  profileSection: {
-    backgroundColor: '#FFFFFF',
-    padding: 24,
-    marginBottom: 16,
+  title: {
+    fontFamily: 'Inter_700Bold',
+    fontSize: 28,
+    color: '#222',
+    letterSpacing: -0.5,
   },
-  profileInfo: {
+  profileRow: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginHorizontal: 24,
+    marginTop: 12,
+    marginBottom: 24,
+  },
+  avatarWrapper: {
+    width: 62,
+    height: 62,
+    borderRadius: 31,
+    backgroundColor: '#fff',
+    marginRight: 16,
+    shadowColor: '#FF3008',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.10,
+    shadowRadius: 8,
+    elevation: 2,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   avatar: {
-    width: 72,
-    height: 72,
-    borderRadius: 36,
-    marginRight: 16,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
   },
-  profileText: {
-    flex: 1,
+  profileName: {
+    fontFamily: 'Inter_700Bold',
+    fontSize: 18,
+    color: '#222',
+    marginBottom: 2,
   },
-  name: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: '#1C1C1C',
-    marginBottom: 4,
-  },
-  email: {
+  profileEmail: {
+    fontFamily: 'Inter_400Regular',
     fontSize: 14,
-    color: '#86939E',
+    color: '#B0B0B0',
   },
-  menuSection: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
-    marginHorizontal: 16,
-    overflow: 'hidden',
+  menuList: {
+    backgroundColor: '#fff',
+    borderRadius: 18,
+    marginHorizontal: 18,
+    marginTop: 8,
+    paddingVertical: 8,
+    shadowColor: '#FF3008',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.08,
+    shadowRadius: 16,
+    elevation: 2,
   },
   menuItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: 16,
+    paddingVertical: 16,
+    paddingHorizontal: 18,
     borderBottomWidth: 1,
-    borderBottomColor: '#F0F0F0',
+    borderBottomColor: '#F2F2F2',
   },
-  menuItemLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  iconContainer: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
+  menuIcon: {
     marginRight: 16,
   },
-  menuItemText: {
+  menuLabel: {
+    fontFamily: 'Inter_600SemiBold',
     fontSize: 16,
-    color: '#1C1C1C',
+    color: '#222',
   },
 });
